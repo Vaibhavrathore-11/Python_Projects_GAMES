@@ -143,6 +143,10 @@ while running:
         # Add new head position
         snake_body.insert(0, (Snake_x, Snake_y))
 
+        # Self collision
+        if (Snake_x, Snake_y)in snake_body[1:]:
+            game_over = True
+
         # Snake growth
         if grow:
             grow = False
