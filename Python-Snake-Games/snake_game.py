@@ -17,6 +17,13 @@ Snake_y = 300
 snake_body = [
     (400, 300)
 ]
+def generate_food():
+    while True:
+       x = random.randrange(0, WIDTH, 20)
+       y = random.randrange(0, HEIGHT, 20)    
+
+       if (x, y) not in snake_body:
+            return x, y
 
 # Movement speed
 speed = 20
@@ -31,8 +38,7 @@ grow = False
 Score = 0
 
 # Food position
-food_x = random.randrange(0, WIDTH, 20)
-food_y = random.randrange(0, HEIGHT, 20)
+food_x, food_y = generate_food()
 
 # Game Clock
 clock = pygame.time.Clock()
@@ -44,6 +50,7 @@ game_over_font = pygame.font.Font(None, 72)
 running = True
 game_over = False
 
+#restart game
 def restart_game():
     global Snake_x, Snake_y
     global snake_body
@@ -64,9 +71,7 @@ def restart_game():
 
     Score = 0
 
-    food_x = random.randrange(0, WIDTH, 20)
-    food_y = random.randrange(0, HEIGHT, 20)
-
+    food_x, food_y = generate_food()
     game_over = False
 
 
@@ -81,7 +86,7 @@ while running:
         # Keyboard input
         if event.type == pygame.KEYDOWN:
 
-            if event.key == pygame.K_LEFT and direction != "Right":
+            if event.key == pygame.K_LEFT and direction != "RIGHT":
                 direction = "LEFT" 
 
             elif event.key == pygame.K_RIGHT and direction != "LEFT":
@@ -134,8 +139,7 @@ while running:
 
             print("Food eaten!")
 
-            food_x = random.randrange(0, WIDTH, 20)
-            food_y = random.randrange(0, HEIGHT, 20)
+            food_x, food_y = generate_food()
 
             grow = True
             Score += 1
@@ -155,30 +159,74 @@ while running:
             snake_body.pop()
 
     # STEP 4 - Background
+
     screen.fill((0, 0, 0))
 
-    # Snake - Green
-    for x, y in snake_body:
+    # Snake Drawing
 
-        pygame.draw.rect(
-            screen,
-            (0, 255, 0),
-            (x, y, 20, 20)
-        )
+    # Head
+    head_x, head_y = snake_body[0]
+
+    pygame.draw.rect(
+      screen,
+      (0, 150, 255),
+      (head_x, head_y, 20, 20)
+   )
+
+    # Eyes
+        # Eyes according to direction
+
+    if direction == "RIGHT":
+        eye1 = (head_x + 14, head_y + 5)
+        eye2 = (head_x + 14, head_y + 15)
+
+    elif direction == "LEFT":
+        eye1 = (head_x + 6, head_y + 5)
+        eye2 = (head_x + 6, head_y + 15)
+
+    elif direction == "UP":
+        eye1 = (head_x + 5, head_y + 6)
+        eye2 = (head_x + 15, head_y + 6)
+
+    elif direction == "DOWN":
+        eye1 = (head_x + 5, head_y + 14)
+        eye2 = (head_x + 15, head_y + 14)
+
+    pygame.draw.circle(
+        screen,
+        (255, 255, 255),
+        eye1,
+        3
+    )
+
+    pygame.draw.circle(
+        screen,
+        (255, 255, 255),
+        eye2,
+        3
+    )
+
+    # Body
+    for x, y in snake_body[1:]:
+      pygame.draw.rect(
+        screen,
+        (0, 100, 200),
+        (x, y, 20, 20)
+    )
 
     # Food - Red
     pygame.draw.rect(
-        screen,
-        (255, 0, 0),
-        (food_x, food_y, 20, 20)
-    )
+      screen,
+      (255, 0, 0),
+      (food_x, food_y, 20, 20)
+)
 
     # Score
     score_text = font.render(
         f"Score: {Score}",
         True,
         (255, 255, 255)
-    )
+      )
 
     screen.blit(score_text, (10, 10))
 
