@@ -81,16 +81,16 @@ while running:
         # Keyboard input
         if event.type == pygame.KEYDOWN:
 
-            if event.key == pygame.K_LEFT:
-                direction = "LEFT"
+            if event.key == pygame.K_LEFT and direction != "Right":
+                direction = "LEFT" 
 
-            elif event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_RIGHT and direction != "LEFT":
                 direction = "RIGHT"
 
-            elif event.key == pygame.K_UP:
+            elif event.key == pygame.K_UP and direction != "DOWN":
                 direction = "UP"
 
-            elif event.key == pygame.K_DOWN:
+            elif event.key == pygame.K_DOWN and direction != "UP":
                 direction = "DOWN"
 
             elif event.key == pygame.K_r and game_over:
